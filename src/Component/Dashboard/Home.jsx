@@ -5,23 +5,36 @@ import { FaRegUser } from "react-icons/fa";
 import ManagmentDashboard from "./ManagmentDashboard";
 import homeIcon from "../Image/homeIcon.png";
 import userProfileIcon from "../Image/userProfile.png";
+import axios from "axios";
 
 function Home() {
+  const [totalReg, settotalReg]  = useState([])
   const [toDate, setToDate] = useState("");
   const [fromDate, setFromDate] = useState("From Date");
   const [activeTab, setActiveTab] = useState("employee"); // Default tab is Employee Dashboard
   const [data, setData] = useState([]);
+  const [len, setlength] = useState([]);
   console.log(data);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/getAllPunchDetails`
+          `${import.meta.env.VITE_API_URL}/getAllPunchDetails` 
+          
         );
+
+
+        const res= await axios.get(
+          `${import.meta.env.VITE_API_URL}/getEmployeeInfo` 
+        )
+        console.log(res)
+        settotalReg(res.data.data.length);
 
         const result = await response.json();
         setData(result.data || []);
+        console.log('hey',result.data)
+        setlength(result.data.length  || 0)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -115,7 +128,7 @@ function Home() {
                   <div className="bg-[#26B3FF] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                       {}
+                       {totalReg}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Total Employee
@@ -125,7 +138,7 @@ function Home() {
                   <div className="bg-[#24948A] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                        0
+                    {  len}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Present Today
@@ -135,7 +148,7 @@ function Home() {
                   <div className="bg-[#FFD755] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                        15
+                        {totalReg - len}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Absent Today
