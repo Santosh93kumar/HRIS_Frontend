@@ -44,8 +44,8 @@ function Onlinepunch() {
     const monthIndex = now.getMonth();
     const year = now.getFullYear();
     const shortMonthsArr = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan", "Feb", "Mar", "April", "May", "June",
+      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
     const daysOfWeek = [
       "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
@@ -197,19 +197,22 @@ function Onlinepunch() {
 
       <h3 className="mx-4 lg:mx-6">Punch IN Time, OUT Time auto</h3>
 
-      <div className="flex md:flex-row justify-between mx-4 lg:mx-6 rounded-lg my-2 lg:my-4 bg-white px-3 py-1">
-        <div className="flex items-center gap-12 w-full lg:w-12/12 md:mr-4">
-          <div className="custom-selects w-full flex gap-5">
+      <div className="flex md:flex-row justify-between mx-4 lg:mx-6 rounded-lg my-2 lg:my-4 bg-zinc-200 px-3 py-1">
+        <div className="flex items-center gap-12 w-full lg:w-7/12 md:mr-4">
+         <div className='w-full flex'>
+         <div className="custom-selects w-9/12 flex my-auto gap-2">
             <label htmlFor="employeeSelect">Select Employee:</label>
             <select id="employeeSelect" onChange={handleChange} value={selectedEmployee}>
-              <option value="" disabled>Select an employee</option>
+              <option value=""  className='flex items-center my-auto' disabled>Select an employee</option>
               {employees.map((employee, index) => (
                 <option key={index} value={employee.name}>{employee.name}</option>
               ))}
             </select>
           </div>
 
-          <input type="text" value={date} readOnly className="w-full rounded-lg outline-none py-1.5" />
+         <div className=' w-3/12 flex items-center justify-center'>
+         <input type="text" value={date} readOnly className="px-auto w-full flex justify-center rounded-lg outline-none py-1.5" /></div>
+         </div>
         </div>
 
         <div className="w-full lg:w-5/12 flex justify-end text-white mt-2 md:mt-0">
