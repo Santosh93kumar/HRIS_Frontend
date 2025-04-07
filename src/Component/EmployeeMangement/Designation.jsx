@@ -5,6 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Header from '../Header'
 
 const Designation = () => {
   const [designation, setDesignation] = useState([]);
@@ -149,17 +150,8 @@ const Designation = () => {
 
   return (
     <section className="bg-sky-100 flex flex-col w-full min-h-screen">
-      <div className="h-20 bg-slate-700 flex justify-end items-center px-4">
-        <div className="flex items-center space-x-2">
-          <p className="text-gray-300 text-lg sm:text-xl">Santosh</p>
-          <img
-            src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg"
-            className="h-12 w-12 sm:h-16 sm:w-16 rounded-full"
-            alt="User Profile"
-          />
-        </div>
-      </div>
-
+     
+      <Header/>
       <div className="bg-[#DBF2FF] p-6 rounded-lg flex-1">
         <h2 className="text-xl sm:text-2xl font-semibold px-3 mb-4">Designation</h2>
 

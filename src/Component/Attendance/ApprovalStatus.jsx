@@ -154,16 +154,7 @@ function ApprovalStatus() {
     <>
       <ToastContainer />
       <section className="bg-sky-100 flex flex-col w-full h-screen">
-        <div className="h-20 bg-slate-700 flex flex-row w-full justify-end items-center pr-4">
-          <div className="flex justify-center items-center space-x-1.5">
-            <p className="text-gray-300 text-xl">Santosh</p>
-            <img
-              src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg"
-              className="h-16 w-16 rounded-full"
-              alt="Profile"
-            />
-          </div>
-        </div>
+       
         <h3 className='text-center my-2 font-bold text-xl'>Transaction Status Report</h3>
 
         <div className="flex flex-row justify-between mx-4 lg:mx-6 rounded-lg my-2 lg:my-4 bg-white px-3 py-1">

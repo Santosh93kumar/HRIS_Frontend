@@ -115,7 +115,7 @@ function Home() {
                   <div className="bg-[#26B3FF] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                        15
+                       {}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Total Employee

@@ -15,6 +15,7 @@ function MyAttendanceReport() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [reason, setReason] = useState("");
+  
 
   useEffect(() => {
     if (date) { // Ensure date is not empty before processing
@@ -96,17 +97,21 @@ function MyAttendanceReport() {
     setSelectedEmployee(e.target.value);
   };
 
+  const handleEditClick = (item) => {
+    setSelectedItem(item);
+    setIsOpen(true);
+  };
+
+  const handleUpdate = () => {
+    // Do your update logic here
+    console.log('Updated Item:', selectedItem);
+    setIsOpen(false);
+  };
+
   return (
     <section className="bg-sky-100 flex flex-col w-full h-screen">
       <div className="h-20 bg-slate-700 flex flex-row w-full justify-end items-center pr-4">
-        <div className="flex justify-center items-center space-x-1.5">
-          <p className="text-gray-300 text-xl">Santosh</p>
-          <img
-            src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?cs=srgb&dl=pexels-simon-robben-55958-614810.jpg&fm=jpg"
-            className="h-16 w-16 rounded-full"
-            alt="User"
-          />
-        </div>
+       
       </div>
 
       <div>
@@ -192,7 +197,8 @@ function MyAttendanceReport() {
                           <div className="flex-1 text-center">{item.punchOut || "No Time"}</div>
                           <div className="flex-1 text-center">{item.status || "No Status"}</div>
                           <div className="flex-1 text-center">
-                            <p className='flex justify-center cursor-pointer' onClick={() => setIsOpen(true)}>
+                            <p className="flex justify-center cursor-pointer"
+              onClick={() => handleEditClick(item)}>
                               <FaEdit />
                             </p>
                           </div>
@@ -209,77 +215,80 @@ function MyAttendanceReport() {
         </section>
 
         {/* Popup Modal */}
-        {
-          isOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-xs px-4">
-              <div className="bg-white p-4 rounded-lg shadow-lg w-[90%] max-w-[578px] mx-auto relative">
-                {/* Modal Header */}
-                <div className="flex justify-between items-center border-b-[1px] border-[#D3D3D3] pb-3">
-                  <p className="font-[600] text-[18px]">In Time Missing Time Entry</p>
-                  <button onClick={() => setIsOpen(false)} className="w-[14px] h-[14px]">
-                    <img src={crossIcon} alt="Close" />
-                  </button>
-                </div>
+        {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+            <h2 className="text-xl font-bold mb-4">Edit Item</h2>
+            <form className="flex flex-col gap-4">
+              <input
+                type="text"
+                value={selectedItem?.name || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, name: e.target.value })}
+                placeholder="Name"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.time || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, time: e.target.value })}
+                placeholder="Time"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.day || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, day: e.target.value })}
+                placeholder="Day"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.date || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, date: e.target.value })}
+                placeholder="Date"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.punchIn || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, punchIn: e.target.value })}
+                placeholder="Punch In"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.punchOut || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, punchOut: e.target.value })}
+                placeholder="Punch Out"
+                className="border p-2 rounded"
+              />
+              <input
+                type="text"
+                value={selectedItem?.status || ''}
+                onChange={(e) => setSelectedItem({ ...selectedItem, status: e.target.value })}
+                placeholder="Status"
+                className="border p-2 rounded"
+              />
 
-                {/* Form */}
-                <div>
-                  {/* Date & Time Fields */}
-                  <div className="flex justify-evenly">
-                    <div>
-                      <label className="block text-[#535353] font-[600] text-[15px]">Date</label>
-                      <div className="relative mt-[9px] flex items-center border-[1px] border-[#696969] rounded-lg p-2">
-                        <input
-                          type="date"
-                          value={date}
-                          onChange={(e) => setDate(e.target.value)}
-                          className="text-[#696969] text-[16px] font-[500] bg-transparent focus:outline-none w-full pr-10 cursor-pointer placeholder-gray-400"
-                        />
-                      </div>
-                    </div>
+              <button
+                type="button"
+                onClick={handleUpdate}
+                className="bg-green-500 text-white py-2 rounded mt-4"
+              >
+                Update
+              </button>
+            </form>
 
-                    <div>
-                      <label className="block text-[#535353] font-[600] text-[15px]">Time</label>
-                      <div className="relative mt-[9px] flex items-center border-[1px] border-[#696969] rounded-lg p-2">
-                        <input
-                          type="time"
-                          value={time}
-                          onChange={(e) => setTime(e.target.value)}
-                          className="text-[#696969] text-[16px] font-[500] bg-transparent focus:outline-none w-full pr-10 cursor-pointer placeholder-gray-400"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Reason Input */}
-                  <div className="flex flex-col mt-4">
-                    <label className="text-[#535353] font-[600] text-[15px]">Reason</label>
-                    <input
-                      type="text"
-                      value={reason}
-                      onChange={(e) => setReason(e.target.value)}
-                      className="border-[1px] border-[#696969] rounded-lg p-2 text-[#696969] text-[16px] font-[500] bg-transparent focus:outline-none"
-                    />
-                  </div>
-
-                  {/* Buttons */}
-                  <div className="flex flex-wrap mt-[18px] justify-end gap-2">
-                    <button
-                      className="w-[92px] h-[40px] rounded-[4px] bg-[#A1A1A1] text-white font-[600] text-[15px] p-[10px]"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Close
-                    </button>
-                    <button
-                      className="w-[92px] h-[40px] rounded-[4px] bg-[#238BB2] text-white font-[600] text-[15px] px-[27px] py-[10px]"
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="text-red-500 mt-2 underline text-sm"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       </div>
     </section>
   );

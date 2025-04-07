@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaRegFilePdf, FaUserEdit, FaTrashAlt } from "react-icons/fa";
-
+import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from "react-router-dom";
-
+import Header from '../Header'
 
 
 
@@ -26,20 +26,21 @@ function EmployeeInfo() {
   }, []);
 
   const deleteEmployee = async (id) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
+    
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/website/employeeInfoRoute/employeeinfo/${id}`);
-            setEmployees(employees.filter(emp => emp._id !== id));
-            alert("Employee deleted successfully!");
+          await axios.delete(`${import.meta.env.VITE_API_URL}/website/employeeInfoRoute/employeeinfo/${id}`);
+          setEmployees(employees.filter(emp => emp._id !== id));
+          toast.success("Employee deleted successfully!");
         } catch (error) {
             console.error("Error deleting employee:", error);
             alert("Error deleting employee.");
         }
-    }
+    
 };
 
   return (
     <div>
+      <Header/>
        <div className="bg-[#DBF2FF] p-6 rounded-lg min-h-screen">
       <h1 className="font-bold text-xl">Employee Info</h1>
 
@@ -93,32 +94,7 @@ function EmployeeInfo() {
             <th className="p-3">Delete</th>
           </tr>
         </thead>
-        {/* <tbody>
-          {employees.map((emp, index) => (
-            <tr key={index} className="text-sm text-center border-t border-gray-200">
-              <td className="p-3">{emp.name}</td>
-              <td className="p-3">{emp.gender}</td>
-              <td className="p-3">{emp.departmentName}</td>
-              <td className="p-3">{new Date(emp.dateOfBirth).toLocaleDateString()}</td>
-              <td className="p-3">{emp.streetAddress}, {emp.city}, {emp.postalCode}, {emp.country}</td>
-              <td className="p-3">
-                <img src={`http://localhost:8000/uploads/EmployeeInfoImage/${emp.profileImage}`} alt="Profile" className="w-12 h-12 rounded-full mx-auto" />
-              </td>
-              <td className="p-3">{new Date(emp.createdAt).toLocaleDateString()}</td>
-              <td className="p-3">
-    <button 
-        onClick={() => navigate(`/employeemanagement/employee_profile/${emp._id}`, { state: emp })} 
-        className="bg-yellow-400 px-2 py-1 rounded text-white"
-    >
-        Edit
-    </button>
-</td>
-              <td className="p-3">
-                <button className="bg-red-500 px-2 py-1 rounded text-white">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody> */}
+    
            <tbody>
       {employees.map((emp, index) => (
         <tr key={index} className="text-sm text-center border-t border-gray-200">

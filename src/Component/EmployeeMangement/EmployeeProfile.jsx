@@ -10,7 +10,7 @@ import { useEffect } from "react";
 
 const EmployeeProfile = () => {
   const { id } = useParams();
-  let [loading, setLoading] = useState(true);
+  let [loading, setLoading] = useState(false);
 
   //   useEffect(() => {
   //     const fetchEmployee = async () => {
@@ -168,19 +168,26 @@ const EmployeeProfile = () => {
         }
       } else {
         // -------------------- Create Employee --------------------
+        setLoading(true);
+       try{
         const response = await axios.post(
-          `${
-            import.meta.env.VITE_API_URL
-          }/website/employeeInfoRoute/employeeinfo`,
-          formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+            `${
+              import.meta.env.VITE_API_URL
+            }/website/employeeInfoRoute/employeeinfo`,
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+          );
 
-        if (response.data.status === 1) {
-          toast.success("Employee added successfully!");
-        } else {
-          toast.error("Error adding employee.");
-        }
+          if (response.data.status === 1) {
+            toast.success("Employee added successfully!");
+          } else {
+            toast.error("Error adding employee.");
+          }
+       }catch(err){
+        console.log(err);
+       }finally{
+        setLoading(false);
+       }
       }
 
       // ✅ Reset form after submit
@@ -247,20 +254,45 @@ const EmployeeProfile = () => {
               <img
                 src={previewImage || defaultimageicon}
                 alt="Profile"
-                className="rounded-full mx-auto w-32 h-32"
+                className="rounded-full border-none mx-auto w-32 h-32"
               />
               <h3 className="font-semibold mt-2">{employee?.name}</h3>
               <input
                 type="file"
-                className="mt-4 border p-2 w-full rounded-md"
+                className="mt-4 border p-2 w-full rounded-md border-none px-1 py-0.5 bg-zinc-200"
                 onChange={handleImageChange}
               />
-              <button
-                type="submit"
-                className="bg-green-500 text-white px-4 py-2 w-full mt-2 rounded"
-              >
-                {employee._id ? "Update" : "Add"}
-              </button>
+            <button
+  type="submit"
+  className="bg-green-500 text-white px-4 py-2 w-full mt-2 rounded flex items-center justify-center"
+  disabled={loading}
+>
+  {loading ? (
+    <svg
+      className="animate-spin h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      />
+    </svg>
+  ) : (
+    employee._id ? "Update" : "Add"
+  )}
+</button>
+
             </div>
             {/* Employee Info Section */}
             <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-2/3">
