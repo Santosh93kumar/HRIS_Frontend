@@ -77,66 +77,10 @@ function Onlinepunch() {
     fetchEmployeeData();
   }, []);
 
-  // const handlePunch = async (type) => {
-  //   const now = new Date();
-
-  //   // Format current time to 12-hour format with AM/PM
-  //   const hour24 = now.getHours();
-  //   const minutes = String(now.getMinutes()).padStart(2, "0");
-  //   const ampm = hour24 >= 12 ? "PM" : "AM";
-  //   let hour12 = hour24 % 12 || 12;
-  //   const formattedTime = `${hour12}:${minutes} ${ampm}`;
-
-  //   if (type === "Punch In") {
-  //     setPunchIn(formattedTime);
-  //   } else if (type === "Punch Out") {
-  //     setPunchOut(formattedTime);
-  //   }
-
-  //   console.log(name, date, day, formattedTime, type);
-
-  //   const payload = {
-  //     name,
-  //     date,
-  //     time: formattedTime,
-  //     day,
-  //     punchIn: type === "Punch In" ? formattedTime : punchIn,
-  //     punchOut: type === "Punch Out" ? formattedTime : punchOut,
-  //     status: "Pending",
-  //   };
-
-  //   try {
-  //     const response = await fetch("
-  // 
-  // 
-  // 
-  // 
-  // 
-  // 
-  // 
-  // 
-  // /onlinePunch", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed to save punch data");
-
-  //     console.log("Punch successful:", await response.json());
-
-  //     // Fetch updated data immediately after punching
-  //     fetchData();
-  //   } catch (error) {
-  //     console.error("Error sending punch data:", error);
-  //   }
-  // };
 
 
   const handlePunch = async (type) => {
     const now = new Date();
-  
-    // Format current time to 12-hour format with AM/PM
     const hour24 = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const ampm = hour24 >= 12 ? "PM" : "AM";
@@ -148,9 +92,11 @@ function Onlinepunch() {
       return;
     }
   
-    // Check if the employee already has a punch-in entry
-    const existingEntry = data.find((item) => item.name === name && item.date === date);
+    // Fetch fresh data before deciding punch out
+    await fetchData();   // <-- Force refresh before getting existingEntry
   
+    const existingEntry = data.find((item) => item.name === name && item.date === date);
+    console.log('existing',existingEntry)
     let payload;
   
     if (type === "Punch In") {
@@ -158,13 +104,22 @@ function Onlinepunch() {
         alert("You have already punched in.");
         return;
       }
-      payload = { name, date, day, time: formattedTime, punchIn: formattedTime, punchOut: null, status: "Pending" };
+      payload = { name, date, day, time: formattedTime, punchIn: formattedTime, punchOut: "", status: "Pending" };
     } else if (type === "Punch Out") {
       if (!existingEntry || !existingEntry.punchIn) {
         alert("You must punch in before punching out.");
+          // Set punchOut to current time
         return;
       }
-      payload = { ...existingEntry, punchOut: formattedTime, status: "Completed" };
+      payload = {
+        _id: existingEntry._id,  // <-- Add id if required
+        name: existingEntry.name,
+        date: existingEntry.date,
+        day: existingEntry.day,
+        punchIn: existingEntry.punchIn,   // Keep old punchIn
+        time:   formattedTime ,          // New punchOut
+        status: "Completed",
+      };
     }
   
     try {
@@ -178,12 +133,12 @@ function Onlinepunch() {
   
       console.log("Punch successful:", await response.json());
   
-      // Fetch updated data immediately after punching
       fetchData();
     } catch (error) {
       console.error("Error sending punch data:", error);
     }
   };
+  
   
   
   const handleChange = (e) => {
