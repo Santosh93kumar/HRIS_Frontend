@@ -14,9 +14,39 @@ function Home() {
   const [activeTab, setActiveTab] = useState("employee"); // Default tab is Employee Dashboard
   const [data, setData] = useState([]);
   const [len, setlength] = useState([]);
-  console.log(data);
+  const [pres, setpres ] = useState([])
+    const [date, setDate] = useState('');
+    console.log('date--',date)
+  
 
   useEffect(() => {
+
+    const now = new Date();
+
+    // Format time to 12-hour format with AM/PM
+    const hour24 = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const ampm = hour24 >= 12 ? "PM" : "AM";
+    let hour12 = hour24 % 12 || 12;
+    const formattedTime = `${hour12}:${minutes} ${ampm}`;
+
+    // Get full date details
+    const dayNum = now.getDate();
+    const monthIndex = now.getMonth();
+    const year = now.getFullYear();
+    const shortMonthsArr = [
+      "Jan", "Feb", "Mar", "April", "May", "June",
+      "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const daysOfWeek = [
+      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    ];
+
+    // Set state values with current time, formatted date and day
+   
+    setDate(`${dayNum} ${shortMonthsArr[monthIndex]}`);
+    if(!date) return;
+    
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -32,7 +62,15 @@ function Home() {
         settotalReg(res.data.data.length);
 
         const result = await response.json();
-        setData(result.data || []);
+        const result_ = result.data
+        setData(result_ || []);
+        const allDates = result_.map(item => item.date);
+        console.log('allDates',allDates)
+     
+        const present = allDates.filter(item => item.trim().toLowerCase() === date.trim().toLowerCase());
+        setpres(present)
+
+        console.log('present',present)
         console.log('hey',result.data)
         setlength(result.data.length  || 0)
       } catch (error) {
@@ -40,7 +78,10 @@ function Home() {
       }
     };
     fetchData();
-  }, []);
+  }, [date]);
+
+
+  
 
   return (
     <>
@@ -138,7 +179,7 @@ function Home() {
                   <div className="bg-[#24948A] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                    {  len}
+                    {  pres.length}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Present Today
@@ -148,7 +189,7 @@ function Home() {
                   <div className="bg-[#FFD755] flex flex-col items-center justify-center pt-9 pb-7 rounded-2xl">
                     <div className="flex flex-col items-center text-white">
                       <h1 className="pt-4 font-[500] text-[18px] text-center">
-                        {totalReg - len}
+                        {totalReg - pres.length}
                       </h1>
                       <p className="pt-1 font-[500] text-[14px]">
                         Absent Today
@@ -191,7 +232,7 @@ function Home() {
                             "Employee Name",
                             "Department",
                             "Present",
-                            "Absent",
+                            "Date",
                             "Punch in Time",
                           ].map((heading, index) => (
                             <th
@@ -222,7 +263,7 @@ function Home() {
                               </td>
                               {/* Absent Column */}
                               <td className="px-4 py-2">
-                                {item.punchIn ? 0 : "❌"}
+                                {item.date }
                               </td>
                               <td className="px-4 py-2">{item.punchIn}</td>
                               {/* <td className="px-4 py-2">

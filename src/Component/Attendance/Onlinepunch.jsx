@@ -173,9 +173,9 @@ function Onlinepunch() {
         <div className="w-full lg:w-5/12 flex justify-end text-white mt-2 md:mt-0">
           <div className="flex gap-2">
             <button onClick={() => handlePunch("Punch In")}
-              className="px-3 py-2 bg-green-700 rounded-lg">Punch In</button>
+              className="px-3 py-2 bg-green-700 rounded-lg cursor-pointer">Punch In</button>
             <button onClick={() => handlePunch("Punch Out")}
-              className="px-3 py-2 bg-red-700 rounded-lg">Punch Out</button>
+              className="px-3 py-2 bg-red-700 rounded-lg cursor-pointer">Punch Out</button>
           </div>
         </div>
       </div>
